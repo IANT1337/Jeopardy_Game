@@ -70,6 +70,20 @@ socket.on('host-joined', (data) => {
     updateContestantsList(data.contestants);
     updateBoard();
     updateGamePhase();
+    
+    // Handle AI feature availability
+    const generateBtn = document.querySelector('button[onclick="generateNewQuestions()"]');
+    if (generateBtn) {
+        if (!data.aiEnabled) {
+            generateBtn.disabled = true;
+            generateBtn.title = 'OpenAI API key not configured';
+            generateBtn.textContent = '🤖 AI Not Available';
+            generateBtn.style.opacity = '0.5';
+        } else {
+            generateBtn.disabled = false;
+            generateBtn.title = 'Generate new questions using AI';
+        }
+    }
 });
 
 socket.on('contestant-list-updated', (contestants) => {

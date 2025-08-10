@@ -351,7 +351,8 @@ io.on('connection', (socket) => {
             socket.emit('host-joined', {
                 contestants: gameState.contestants,
                 gameState: gameState,
-                sessionId: data.sessionId
+                sessionId: data.sessionId,
+                aiEnabled: !!process.env.OPENAI_API_KEY
             });
             console.log(`Host ${isReconnection ? 'reconnected to' : 'joined'} session ${data.sessionId}: ${socket.id}`);
         }).catch(error => {
@@ -653,6 +654,14 @@ io.on('connection', (socket) => {
     
     socket.on('generate-new-questions', async () => {
         if (socket.id !== gameState.hostId) return;
+        
+        // Check if OpenAI API key is configured
+        if (!process.env.OPENAI_API_KEY) {
+            socket.emit('questions-generation-error', { 
+                error: 'OpenAI API key not configured. Please set the OPENAI_API_KEY environment variable to use AI question generation.' 
+            });
+            return;
+        }
         
         try {
             socket.emit('questions-generating', { status: 'Generating new questions with AI...' });
