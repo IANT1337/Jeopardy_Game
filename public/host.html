@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jeopardy Host Interface</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="alternate icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/host.css">
+</head>
+<body>
+    <div class="container">
+        <div id="auth-check" class="loading">
+            Checking authentication...
+        </div>
+        
+        <div id="auth-error" class="auth-error hidden">
+            <h2>Authentication Failed</h2>
+            <p id="auth-error-message">Please return to the main page and enter valid credentials.</p>
+            <button class="btn btn-primary" onclick="window.location.href='/'">Return to Main Page</button>
+        </div>
+        
+        <div id="game-interface" class="hidden">
+            <div class="header">
+                <h1>Jeopardy Host Interface</h1>
+                <p>Control the game, manage contestants, and judge answers</p>
+                <div id="session-display" class="session-info">
+                    <strong>Session ID:</strong> <span id="current-session-id">Loading...</span>
+                </div>
+            </div>
+            
+            <div class="controls">
+                <div class="contestants-panel">
+                    <h3>Contestants</h3>
+                    <div id="contestants-list">
+                        <p>No contestants connected yet...</p>
+                    </div>
+                </div>
+                
+                <div class="game-controls">
+                    <h3>Game Controls</h3>
+                    <button class="btn btn-primary" onclick="startFinalJeopardy()">Start Final Jeopardy</button>
+                    <button class="btn btn-primary" onclick="resetGame()">Reset Game</button>
+                    <p><strong>Game Phase:</strong> <span id="game-phase">Waiting for contestants</span></p>
+                </div>
+            </div>
+            
+            <div id="buzzer-info" class="buzzer-info hidden">
+                <strong id="buzzer-contestant"></strong> buzzed in!
+            </div>
+            
+            <div id="current-question" class="current-question hidden">
+                <div class="question-text" id="question-text"></div>
+                <div id="question-meta"></div>
+                
+                <div id="answer-section" class="answer-section hidden">
+                    <button class="show-answer-btn" onclick="showAnswer()">Show Answer</button>
+                    <div id="answer-display" class="hidden">
+                        <div class="answer-text" id="answer-text"></div>
+                    </div>
+                </div>
+                
+                <div id="daily-double-controls" class="wager-controls hidden">
+                    <p>Waiting for <span id="daily-double-contestant"></span> to set their wager...</p>
+                </div>
+                
+                <div id="answer-controls" class="answer-controls hidden">
+                    <button class="btn btn-correct" onclick="judgeAnswer(true)">✓ Correct</button>
+                    <button class="btn btn-incorrect" onclick="judgeAnswer(false)">✗ Incorrect</button>
+                </div>
+            </div>
+            
+            <div id="jeopardy-board" class="jeopardy-board">
+                <!-- Board will be populated by JavaScript -->
+            </div>
+            
+            <div id="final-jeopardy" class="final-jeopardy hidden">
+                <h2>🏆 Final Jeopardy</h2>
+                <div id="final-question-text"></div>
+                <div id="final-wagers"></div>
+                <div id="final-judging" class="hidden">
+                    <h3>Judge Final Jeopardy Answers:</h3>
+                    <div id="final-answers"></div>
+                    <button class="btn btn-primary" onclick="submitFinalJudgment()">Submit Final Judgment</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/host.js"></script>
+</body>
+</html>

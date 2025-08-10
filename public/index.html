@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jeopardy Game - Ultimate Quiz Experience</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="alternate icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/index.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 Jeopardy Game</h1>
+            <p class="subtitle">Create or join a game session</p>
+        </div>
+        
+        <div class="main-actions">
+            <div class="role-selection">
+                <div class="role-card host-card" onclick="showHostOptions()">
+                    <div class="role-icon">🎭</div>
+                    <h3>Host Game</h3>
+                    <p>Create and control game sessions</p>
+                    <div class="role-button">Start Hosting</div>
+                </div>
+                <div class="role-card contestant-card" onclick="showContestantJoin()">
+                    <div class="role-icon">🎪</div>
+                    <h3>Join as Contestant</h3>
+                    <p>Compete in existing games</p>
+                    <div class="role-button">Join Game</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Host Options -->
+        <div id="host-options" class="auth-section hidden">
+            <div class="section-header">
+                <h3>🎭 Host a Game</h3>
+            </div>
+            
+            <div class="form-section">
+                <h4>Create New Session</h4>
+                <div class="form-group">
+                    <label for="host-password">Host Password:</label>
+                    <input type="password" id="host-password" placeholder="Enter host password" class="form-input">
+                </div>
+                <button class="btn btn-primary" onclick="createSession()">
+                    <span class="btn-icon">✨</span>
+                    Create Session
+                </button>
+            </div>
+            
+            <div class="divider">
+                <span>OR</span>
+            </div>
+            
+            <div class="form-section">
+                <h4>Join Existing Session</h4>
+                <div class="form-group">
+                    <label for="host-session-id">Session ID:</label>
+                    <input type="text" id="host-session-id" placeholder="Enter session ID" class="form-input">
+                </div>
+                <button class="btn btn-secondary" onclick="joinAsHost()">
+                    <span class="btn-icon">🔗</span>
+                    Join Session
+                </button>
+            </div>
+            
+            <div class="back-nav">
+                <button class="btn btn-link" onclick="showSection('landing')">← Back</button>
+            </div>
+        </div>
+        
+        <!-- Contestant Join -->
+        <div id="contestant-join" class="auth-section hidden">
+            <div class="section-header">
+                <h3>🎪 Join Game</h3>
+            </div>
+            
+            <div class="form-section">
+                <div class="form-group">
+                    <label for="contestant-name">Your Name:</label>
+                    <input type="text" id="contestant-name" placeholder="Enter your name" maxlength="20" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label for="contestant-session-id">Session ID:</label>
+                    <input type="text" id="contestant-session-id" placeholder="Enter session ID" class="form-input">
+                </div>
+                <button class="btn btn-primary" onclick="joinAsContestant()">
+                    <span class="btn-icon">🎮</span>
+                    Join Game
+                </button>
+            </div>
+            
+            <div class="back-nav">
+                <button class="btn btn-link" onclick="showSection('landing')">← Back</button>
+            </div>
+        </div>
+        
+        <!-- Session Info -->
+        <div id="session-info" class="auth-section success-section hidden">
+            <div class="section-header success">
+                <div class="success-icon">✅</div>
+                <h3>Session Created!</h3>
+            </div>
+            
+            <div class="session-details">
+                <div class="session-display">
+                    <label>Session ID:</label>
+                    <div class="session-id-container">
+                        <span id="created-session-id" class="session-id"></span>
+                        <button class="copy-btn" onclick="copySessionId()" title="Copy to clipboard">📋</button>
+                    </div>
+                </div>
+                
+                <p>Share this ID with contestants to let them join your game.</p>
+                
+                <button class="btn btn-primary btn-large" onclick="proceedToHost()">
+                    <span class="btn-icon">🎮</span>
+                    Start Hosting
+                </button>
+            </div>
+            
+            <div class="back-nav">
+                <button class="btn btn-link" onclick="showSection('host-options')">← Back</button>
+            </div>
+        </div>
+        
+        <!-- Error Display -->
+        <div id="error-message" class="error-message hidden">
+            <div class="error-icon">⚠️</div>
+            <span id="error-text"></span>
+            <button class="error-close" onclick="hideError()">×</button>
+        </div>
+        
+        <!-- Loading Indicator -->
+        <div id="loading" class="loading-overlay hidden">
+            <div class="loading-spinner"></div>
+            <p>Connecting to game server...</p>
+        </div>
+        
+        <!-- Simple Info -->
+        <div id="landing" class="simple-info">
+            <div class="info-card">
+                <h3>How to Play</h3>
+                <ol>
+                    <li><strong>Host:</strong> Create a session and share the Session ID</li>
+                    <li><strong>Players:</strong> Join using the Session ID</li>
+                    <li><strong>Game:</strong> Answer questions and compete for points!</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/index.js"></script>
+</body>
+</html>

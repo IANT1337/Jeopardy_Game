@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jeopardy Contestant Interface</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="alternate icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/contestant.css">
+</head>
+<body>
+    <div class="container">
+        <div id="auth-check" class="loading">
+            Joining game session...
+        </div>
+        
+        <div id="auth-error" class="auth-error hidden">
+            <h2>Unable to Join Game</h2>
+            <p id="auth-error-message">Please check your session ID and try again.</p>
+            <button class="btn btn-primary" onclick="window.location.href='/'">Return to Main Page</button>
+        </div>
+        
+        <div id="game-interface" class="hidden">
+            <div class="header">
+                <h1>Jeopardy</h1>
+                <p>Compete for the highest score!</p>
+                <div id="session-display" class="session-info">
+                    <strong>Session:</strong> <span id="current-session-id">Loading...</span>
+                </div>
+            </div>
+            
+            <div id="jeopardy-board" class="jeopardy-board">
+                <!-- Board will be populated by JavaScript -->
+            </div>
+            
+            <div class="game-content">
+                <div class="left-panel">
+                    <div class="contestant-info" id="answer-status">
+                        <div id="contestant-name">Contestant</div>
+                        <div class="score" id="contestant-score">$0</div>
+                    </div>
+                    
+                    <div class="contestants-table-container">
+                        <table class="contestants-table" id="contestants-list">
+                            <thead>
+                                <tr>
+                                    <th>Contestant</th>
+                                    <th>Score</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Contestants will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="right-panel">
+                    <button id="buzz-button" class="buzz-button" onclick="buzzIn()" disabled>
+                        BUZZ IN!
+                    </button>
+                </div>
+            </div>
+            
+            <div id="status-message" class="status-message hidden">
+                <span id="status-text"></span>
+            </div>
+            
+            <div id="current-question" class="current-question hidden">
+                <div class="question-text" id="question-text"></div>
+                <div id="question-meta"></div>
+            </div>
+            
+            <div id="daily-double-wager" class="wager-controls hidden">
+                <h3>Daily Double!</h3>
+                <p>Enter your wager (Maximum: $<span id="max-wager">0</span>):</p>
+                <input type="number" id="wager-input" class="wager-input" min="0" max="0">
+                <button class="btn" onclick="submitWager()">Submit Wager</button>
+            </div>
+            
+            <div id="final-jeopardy" class="final-jeopardy hidden">
+                <h2>Final Jeopardy</h2>
+                <div id="final-question-text"></div>
+                <div id="final-wager-controls" class="wager-controls">
+                    <p>Enter your Final Jeopardy wager (Maximum: $<span id="final-max-wager">0</span>):</p>
+                    <input type="number" id="final-wager-input" class="wager-input" min="0" max="0">
+                    <button class="btn" onclick="submitFinalWager()">Submit Wager</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/contestant.js"></script>
+</body>
+</html>

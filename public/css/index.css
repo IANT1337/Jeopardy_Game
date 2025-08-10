@@ -1,0 +1,611 @@
+/* Index page specific styles - Modern Design */
+
+/* Header Styles */
+.header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.header h1 {
+    font-size: 3.5em;
+    margin-bottom: 10px;
+    background: linear-gradient(45deg, #ff6b35, #f7931e, #ffd700);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: none;
+}
+
+.subtitle {
+    font-size: 1.2em;
+    color: #ccc;
+    margin-bottom: 30px;
+    font-weight: 300;
+}
+
+/* Main Actions */
+.main-actions {
+    margin: 50px 0;
+}
+
+.role-selection {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin: 40px 0;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.role-card {
+    background: rgba(255,255,255,0.1);
+    padding: 40px 30px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    backdrop-filter: blur(15px);
+    border: 2px solid rgba(255,255,255,0.2);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.role-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+    transition: left 0.5s;
+}
+
+.role-card:hover::before {
+    left: 100%;
+}
+
+.role-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    border-color: rgba(255,107,53,0.5);
+}
+
+.host-card:hover {
+    background: rgba(255,107,53,0.1);
+}
+
+.contestant-card:hover {
+    background: rgba(76,175,80,0.1);
+}
+
+.role-icon {
+    font-size: 4em;
+    margin-bottom: 20px;
+    display: block;
+}
+
+.role-card h3 {
+    color: #ff6b35;
+    margin-bottom: 15px;
+    font-size: 1.5em;
+}
+
+.role-card p {
+    color: #ccc;
+    margin-bottom: 25px;
+    line-height: 1.5;
+}
+
+.role-button {
+    background: linear-gradient(45deg, #ff6b35, #e55a2b);
+    color: white;
+    padding: 12px 25px;
+    border-radius: 25px;
+    font-weight: bold;
+    display: inline-block;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.role-button:hover {
+    background: linear-gradient(45deg, #e55a2b, #d14020);
+    transform: scale(1.05);
+}
+
+/* Auth Sections */
+.auth-section {
+    background: rgba(255,255,255,0.1);
+    padding: 40px;
+    border-radius: 20px;
+    margin: 40px auto;
+    max-width: 600px;
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255,255,255,0.2);
+    animation: slideIn 0.5s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+}
+
+.section-header h3 {
+    color: #ff6b35;
+    margin-bottom: 10px;
+    font-size: 1.8em;
+}
+
+.section-header p {
+    color: #ccc;
+    font-size: 1.1em;
+}
+
+.success-section {
+    border-color: rgba(76,175,80,0.3);
+    background: rgba(76,175,80,0.1);
+}
+
+.success .success-icon {
+    font-size: 3em;
+    margin-bottom: 15px;
+}
+
+.success h3 {
+    color: #4CAF50 !important;
+}
+
+/* Form Styles */
+.form-section {
+    margin: 25px 0;
+}
+
+.form-section h4 {
+    color: #ff6b35;
+    margin-bottom: 20px;
+    font-size: 1.2em;
+    text-align: center;
+}
+
+.form-group {
+    margin: 20px 0;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #ff6b35;
+    font-size: 1em;
+}
+
+.form-input {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid rgba(255,255,255,0.2);
+    border-radius: 10px;
+    font-size: 1em;
+    box-sizing: border-box;
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+}
+
+.form-input:focus {
+    border-color: #ff6b35;
+    outline: none;
+    background: rgba(255,255,255,0.15);
+    transform: scale(1.02);
+}
+
+.form-input::placeholder {
+    color: #aaa;
+}
+
+.form-hint {
+    font-size: 0.85em;
+    color: #bbb;
+    margin-top: 5px;
+    font-style: italic;
+}
+
+.divider {
+    text-align: center;
+    margin: 30px 0;
+    position: relative;
+}
+
+.divider::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: rgba(255,255,255,0.2);
+}
+
+.divider span {
+    background: rgba(0,0,0,0.8);
+    padding: 0 20px;
+    color: #ccc;
+    font-size: 0.9em;
+    position: relative;
+}
+
+/* Buttons */
+.btn {
+    padding: 15px 30px;
+    font-size: 1em;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 10px;
+    font-weight: bold;
+    position: relative;
+    overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-icon {
+    font-size: 1.1em;
+}
+
+.btn-primary {
+    background: linear-gradient(45deg, #ff6b35, #e55a2b);
+    color: white;
+    box-shadow: 0 4px 15px rgba(255,107,53,0.3);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(45deg, #e55a2b, #d14020);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255,107,53,0.4);
+}
+
+.btn-secondary {
+    background: linear-gradient(45deg, #666, #555);
+    color: white;
+    box-shadow: 0 4px 15px rgba(102,102,102,0.3);
+}
+
+.btn-secondary:hover {
+    background: linear-gradient(45deg, #555, #444);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102,102,102,0.4);
+}
+
+.btn-large {
+    padding: 18px 40px;
+    font-size: 1.2em;
+}
+
+.btn-link {
+    background: transparent;
+    color: #ff6b35;
+    border: 2px solid rgba(255,107,53,0.3);
+    padding: 10px 20px;
+    font-size: 0.9em;
+}
+
+.btn-link:hover {
+    background: rgba(255,107,53,0.1);
+    border-color: #ff6b35;
+}
+
+/* Session Display */
+.session-display {
+    text-align: center;
+    margin: 30px 0;
+}
+
+.session-display label {
+    display: block;
+    color: #ff6b35;
+    font-size: 1.1em;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.session-id-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin: 15px 0;
+}
+
+.session-id {
+    font-size: 2.2em;
+    font-weight: bold;
+    color: #4CAF50;
+    background: rgba(76,175,80,0.2);
+    padding: 15px 25px;
+    border-radius: 15px;
+    display: inline-block;
+    letter-spacing: 3px;
+    border: 2px solid rgba(76,175,80,0.3);
+    font-family: 'Courier New', monospace;
+}
+
+.copy-btn {
+    background: rgba(255,255,255,0.1);
+    border: 2px solid rgba(255,255,255,0.2);
+    color: #fff;
+    padding: 10px 15px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1.2em;
+}
+
+.copy-btn:hover {
+    background: rgba(255,255,255,0.2);
+    transform: scale(1.1);
+}
+
+.session-instructions {
+    background: rgba(255,255,255,0.05);
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px 0;
+    text-align: left;
+}
+
+.session-instructions h4 {
+    color: #ff6b35;
+    margin-bottom: 15px;
+}
+
+.session-instructions ol {
+    color: #ddd;
+    line-height: 1.8;
+}
+
+.session-instructions li {
+    margin: 8px 0;
+}
+
+/* Navigation */
+.back-nav {
+    text-align: center;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.2);
+}
+
+/* Error Styles */
+.error-message {
+    background: rgba(244, 67, 54, 0.2);
+    border: 2px solid #f44336;
+    padding: 20px;
+    border-radius: 15px;
+    margin: 20px auto;
+    max-width: 500px;
+    text-align: center;
+    color: #fff;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+.error-icon {
+    font-size: 1.5em;
+    flex-shrink: 0;
+}
+
+.error-close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.5em;
+    cursor: pointer;
+    padding: 5px;
+    line-height: 1;
+}
+
+.error-close:hover {
+    opacity: 0.7;
+}
+
+/* Loading */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.8);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(5px);
+}
+
+.loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid rgba(255,107,53,0.3);
+    border-top: 4px solid #ff6b35;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 20px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading-overlay p {
+    color: #fff;
+    font-size: 1.1em;
+}
+
+/* Simple Info Sections */
+.simple-info {
+    margin: 60px auto;
+    max-width: 600px;
+}
+
+.simple-info .info-card {
+    background: rgba(255,255,255,0.1);
+    padding: 30px;
+    border-radius: 20px;
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255,255,255,0.2);
+    text-align: center;
+}
+
+.simple-info .info-card h3 {
+    color: #ff6b35;
+    margin-bottom: 20px;
+    font-size: 1.5em;
+}
+
+.simple-info .info-card ol {
+    text-align: left;
+    color: #ddd;
+    line-height: 1.8;
+    font-size: 1.1em;
+}
+
+.simple-info .info-card li {
+    margin: 10px 0;
+}
+
+.simple-info .info-card strong {
+    color: #ff6b35;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .header h1 {
+        font-size: 2.5em;
+    }
+    
+    .role-selection {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .role-card {
+        padding: 30px 20px;
+    }
+    
+    .simple-info {
+        margin: 40px 20px;
+    }
+    
+    .simple-info .info-card {
+        padding: 20px;
+    }
+    
+    .auth-section {
+        padding: 30px 20px;
+        margin: 20px;
+    }
+    
+    .session-id {
+        font-size: 1.6em;
+        letter-spacing: 2px;
+    }
+    
+    .btn {
+        padding: 12px 20px;
+        font-size: 0.9em;
+    }
+    
+    .btn-large {
+        padding: 15px 30px;
+        font-size: 1.1em;
+    }
+}
+
+@media (max-width: 480px) {
+    .header h1 {
+        font-size: 2em;
+    }
+    
+    .role-card {
+        padding: 25px 15px;
+    }
+    
+    .session-id {
+        font-size: 1.4em;
+        padding: 12px 20px;
+    }
+    
+    .simple-info .info-card {
+        padding: 15px;
+    }
+}
+
+/* Toast Animations */
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+/* Success Toast Styles */
+.success-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.success-icon {
+    font-size: 1.2em;
+}
+
+/* Info Sections */
