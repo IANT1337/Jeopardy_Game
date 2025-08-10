@@ -198,6 +198,7 @@ Format the output as CSV with the following structure:
 - Each question should be formatted as: "question text;correct answer"
 - Make sure answers are in proper Jeopardy format (What is...?, Who is...?, etc.)
 - Categories should be varied and interesting
+- Questions should be very difficult
 - Questions should increase in difficulty with higher dollar values
 - Do not include any markdown formatting or code blocks in the response
 - Start directly with the CSV header row
@@ -207,7 +208,7 @@ price,GEOGRAPHY,SCIENCE,HISTORY,SPORTS,ENTERTAINMENT,FOOD
 200,This continent contains the Amazon rainforest;What is South America?,This gas makes up about 78% of Earth's atmosphere;What is nitrogen?,This war began in 1914;What is World War I?,This sport is played at Wimbledon;What is tennis?,This streaming service created Stranger Things;What is Netflix?,This Italian dish means "little strings";What is spaghetti?`;
 
         const completion = await openaiClient.chat.completions.create({
-            model: "gpt-3.5-turbo",
+            model: "gpt-4o",
             messages: [
                 {
                     role: "system",
