@@ -55,6 +55,19 @@ function generateSessionId() {
     return Math.random().toString(36).substring(2, 8).toUpperCase();
 }
 
+// Create default questions if file is missing
+function createDefaultQuestions() {
+    const defaultQuestions = `price,GEOGRAPHY,SCIENCE,HISTORY,SPORTS,ENTERTAINMENT,FOOD
+200,This continent contains the Amazon rainforest;What is South America?,This gas makes up about 78% of Earth's atmosphere;What is nitrogen?,This war began in 1914;What is World War I?,This sport is played at Wimbledon;What is tennis?,This streaming service created Stranger Things;What is Netflix?,This Italian dish means "little strings";What is spaghetti?
+400,This is the longest river in the world;What is the Nile?,This planet is known as the Red Planet;What is Mars?,This Egyptian queen allied with Julius Caesar;Who is Cleopatra?,This team won the first Super Bowl;Who are the Green Bay Packers?,This movie features the song "Let It Go";What is Frozen?,This spice is derived from the Crocus flower;What is saffron?
+600,This mountain range separates Europe and Asia;What are the Urals?,This is the chemical symbol for gold;What is Au?,This empire was ruled by Caesar Augustus;What is the Roman Empire?,This country hosted the 2016 Summer Olympics;What is Brazil?,This actor played Jack Sparrow;Who is Johnny Depp?,This type of pastry is used to make profiteroles;What is choux pastry?
+800,This is the smallest country in the world;What is Vatican City?,This scientist developed the theory of evolution;Who is Charles Darwin?,This wall fell in 1989;What is the Berlin Wall?,This sport uses terms like "love" and "deuce";What is tennis?,This TV show featured a chemistry teacher turned criminal;What is Breaking Bad?,This cooking method uses dry heat in an oven;What is baking?
+1000,This African country was never colonized by Europeans;What is Ethiopia?,This particle accelerator is located in Switzerland;What is the Large Hadron Collider?,This document was signed in 1215;What is the Magna Carta?,This golfer won the Masters Tournament 5 times;Who is Tiger Woods?,This film won the Academy Award for Best Picture in 2020;What is Parasite?,This French cooking technique means "everything in its place";What is mise en place?`;
+    
+    fs.writeFileSync('jeopardy_questions.csv', defaultQuestions);
+    console.log('Created default jeopardy_questions.csv file');
+}
+
 // Clean up expired sessions
 function cleanupSessions() {
     const now = Date.now();
@@ -72,13 +85,8 @@ setInterval(cleanupSessions, 60 * 60 * 1000);
 function loadQuestions() {
     return new Promise((resolve, reject) => {
         if (!fs.existsSync('jeopardy_questions.csv')) {
-            console.error('jeopardy_questions.csv file not found!');
-            console.error('Please create a jeopardy_questions.csv file with your questions.');
-            console.error('Format: price,CATEGORY1,CATEGORY2,CATEGORY3,CATEGORY4,CATEGORY5,CATEGORY6');
-            gameState.categories = [];
-            gameState.board = [];
-            reject(new Error('Questions file not found'));
-            return;
+            console.warn('jeopardy_questions.csv file not found! Creating default questions...');
+            createDefaultQuestions();
         }
         
         loadQuestionsFromCSV()

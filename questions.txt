@@ -1,0 +1,6 @@
+prices	SCIENCE	HISTORY	SPORTS	MOVIES	GEOGRAPHY	LITERATURE
+200	This planet is known as the Red Planet	This war began in 1914	This sport uses a puck	This movie features a shark	This country has the most time zones	This author wrote Romeo and Juliet
+400	This element has the symbol Au	This ancient wonder was in Alexandria	This sport is played at Wimbledon	This director made Jaws	This is the smallest country in the world	This novel begins "Call me Ishmael"
+600	This scientist developed the theory of relativity	This empire was ruled by Caesar	This team has won the most Super Bowls	This movie won Best Picture in 1994	This river is the longest in the world	This author wrote 1984
+800	This particle has no electric charge	This battle ended Napoleon's rule	This golfer has won the most Masters tournaments	This actor played Forrest Gump	This mountain range contains Mount Everest	This epic poem was written by Homer
+1000	This law states that energy cannot be created or destroyed	This year marked the fall of the Berlin Wall	This athlete holds the record for most Olympic gold medals	This film is considered the greatest movie of all time by AFI	This desert is the largest in the world	This novel won the Pulitzer Prize in 1961

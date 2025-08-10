@@ -8,5 +8,6 @@ yarn-error.log*
 .env.test.local
 .env.production.local
 .DS_Store
-jeopardy_questions.csv
-questions.txt
+# Keep questions files for deployment
+# jeopardy_questions.csv
+# questions.txt
