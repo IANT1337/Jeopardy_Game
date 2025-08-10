@@ -180,6 +180,26 @@ socket.on('clear-generation-status', () => {
     hideGenerationStatus();
 });
 
+// Handle reset errors
+socket.on('reset-error', (data) => {
+    showGenerationStatus(`Reset Error: ${data.error}`, 'error');
+    
+    // Hide status after 5 seconds
+    setTimeout(() => {
+        hideGenerationStatus();
+    }, 5000);
+});
+
+// Handle reset success
+socket.on('reset-success', (data) => {
+    showGenerationStatus(data.status, 'success');
+    
+    // Hide status after 3 seconds
+    setTimeout(() => {
+        hideGenerationStatus();
+    }, 3000);
+});
+
 // UI update functions
 function updateContestantsList(contestants) {
     const list = document.getElementById('contestants-list');
@@ -425,9 +445,9 @@ function submitFinalJudgment() {
 
 // Game management
 function resetGame() {
-    if (confirm('Are you sure you want to reset the game? This will clear all scores and reset the board.')) {
-        // Clear any visible generation status immediately
-        hideGenerationStatus();
+    if (confirm('Are you sure you want to reset the game? This will clear all scores and restore the original questions from the CSV file.')) {
+        // Show reset status immediately
+        showGenerationStatus('Resetting game and restoring original questions...', 'generating');
         socket.emit('reset-game');
     }
 }

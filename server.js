@@ -58,6 +58,9 @@ let gameState = {
     finalJeopardyWagers: {}
 };
 
+// Store original questions for reset functionality
+let originalQuestionsBackup = null;
+
 // Game sessions and authentication
 const gameSessions = new Map(); // sessionId -> { hostPassword, active, createdAt }
 const HOST_PASSWORD = process.env.HOST_PASSWORD || 'jeopardy2025'; // Default password
@@ -100,6 +103,16 @@ function loadQuestions() {
         if (!fs.existsSync('jeopardy_questions.csv')) {
             console.warn('jeopardy_questions.csv file not found! Creating default questions...');
             createDefaultQuestions();
+        }
+        
+        // Create backup of original questions if not already done
+        if (!originalQuestionsBackup) {
+            try {
+                originalQuestionsBackup = fs.readFileSync('jeopardy_questions.csv', 'utf8');
+                console.log('Original questions backed up for reset functionality');
+            } catch (error) {
+                console.error('Failed to backup original questions:', error);
+            }
         }
         
         loadQuestionsFromCSV()
@@ -177,6 +190,26 @@ function loadQuestionsFromCSV() {
 // Initialize questions
 loadQuestions();
 
+// Function to restore original questions from backup
+function restoreOriginalQuestions() {
+    return new Promise((resolve, reject) => {
+        if (!originalQuestionsBackup) {
+            reject(new Error('No original questions backup available'));
+            return;
+        }
+        
+        try {
+            // Restore the original CSV file
+            fs.writeFileSync('jeopardy_questions.csv', originalQuestionsBackup);
+            console.log('Original questions restored from backup');
+            resolve();
+        } catch (error) {
+            console.error('Failed to restore original questions:', error);
+            reject(error);
+        }
+    });
+}
+
 // Function to generate new questions using OpenAI
 async function generateNewQuestions() {
     try {
@@ -234,6 +267,8 @@ prices,Modern Firearms Engineering,Submarine History & Tech,Hollywood Deep Cuts,
         // Save the new questions to the CSV file
         fs.writeFileSync('jeopardy_questions.csv', csvContent);
         console.log('New questions generated and saved successfully');
+        
+        // Note: We don't update the originalQuestionsBackup here to preserve the original
         
         return csvContent;
     } catch (error) {
@@ -620,41 +655,53 @@ io.on('connection', (socket) => {
         });
     });
     
-    socket.on('reset-game', () => {
+    socket.on('reset-game', async () => {
         if (socket.id !== gameState.hostId) return;
         
-        // Reset scores but keep contestants
-        Object.keys(gameState.contestants).forEach(id => {
-            gameState.contestants[id].score = 0;
-            gameState.contestants[id].canBuzz = true;
-        });
-        
-        // Also reset scores in persistent storage
-        Object.keys(gameState.contestantsByName).forEach(name => {
-            gameState.contestantsByName[name].score = 0;
-            gameState.contestantsByName[name].canBuzz = true;
-        });
-        
-        // Reset board
-        gameState.board.forEach(row => {
-            row.questions.forEach(question => {
-                question.answered = false;
+        try {
+            // Restore original questions first
+            await restoreOriginalQuestions();
+            await loadQuestions();
+            
+            // Reset scores but keep contestants
+            Object.keys(gameState.contestants).forEach(id => {
+                gameState.contestants[id].score = 0;
+                gameState.contestants[id].canBuzz = true;
             });
-        });
-        
-        // Assign a new daily double for this game
-        assignDailyDouble();
-        
-        gameState.currentQuestion = null;
-        gameState.answering = false;
-        gameState.answeringContestant = null;
-        gameState.gamePhase = 'playing';
-        gameState.finalJeopardyWagers = {};
-        
-        // Clear any AI generation status messages
-        socket.emit('clear-generation-status');
-        
-        io.emit('game-reset', gameState);
+            
+            // Also reset scores in persistent storage
+            Object.keys(gameState.contestantsByName).forEach(name => {
+                gameState.contestantsByName[name].score = 0;
+                gameState.contestantsByName[name].canBuzz = true;
+            });
+            
+            // Assign a new daily double for this game
+            assignDailyDouble();
+            
+            gameState.currentQuestion = null;
+            gameState.answering = false;
+            gameState.answeringContestant = null;
+            gameState.gamePhase = 'playing';
+            gameState.finalJeopardyWagers = {};
+            
+            // Clear any AI generation status messages
+            socket.emit('clear-generation-status');
+            
+            // Send success message
+            socket.emit('reset-success', { 
+                status: 'Game reset successfully - original questions restored!' 
+            });
+            
+            io.emit('game-reset', gameState);
+            
+            console.log('Game reset completed - original questions restored');
+            
+        } catch (error) {
+            console.error('Error during game reset:', error);
+            socket.emit('reset-error', { 
+                error: 'Failed to reset game completely. Questions may not have been restored.' 
+            });
+        }
     });
     
     socket.on('generate-new-questions', async () => {
