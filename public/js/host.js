@@ -141,6 +141,9 @@ socket.on('game-reset', (newGameState) => {
     hideCurrentQuestion();
     hideFinalJeopardy();
     updateGamePhase();
+    
+    // Clear any AI generation status messages when game is reset
+    hideGenerationStatus();
 });
 
 // New question generation handlers
@@ -170,6 +173,11 @@ socket.on('questions-generation-error', (data) => {
     setTimeout(() => {
         hideGenerationStatus();
     }, 5000);
+});
+
+// Handle clearing generation status
+socket.on('clear-generation-status', () => {
+    hideGenerationStatus();
 });
 
 // UI update functions
@@ -418,6 +426,8 @@ function submitFinalJudgment() {
 // Game management
 function resetGame() {
     if (confirm('Are you sure you want to reset the game? This will clear all scores and reset the board.')) {
+        // Clear any visible generation status immediately
+        hideGenerationStatus();
         socket.emit('reset-game');
     }
 }

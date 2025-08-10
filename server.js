@@ -651,6 +651,9 @@ io.on('connection', (socket) => {
         gameState.gamePhase = 'playing';
         gameState.finalJeopardyWagers = {};
         
+        // Clear any AI generation status messages
+        socket.emit('clear-generation-status');
+        
         io.emit('game-reset', gameState);
     });
     
