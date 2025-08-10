@@ -205,7 +205,8 @@ Format the output as CSV with the following structure:
 
 Example format:
 price,GEOGRAPHY,SCIENCE,HISTORY,SPORTS,ENTERTAINMENT,FOOD
-200,This continent contains the Amazon rainforest;What is South America?,This gas makes up about 78% of Earth's atmosphere;What is nitrogen?,This war began in 1914;What is World War I?,This sport is played at Wimbledon;What is tennis?,This streaming service created Stranger Things;What is Netflix?,This Italian dish means "little strings";What is spaghetti?`;
+prices,Modern Firearms Engineering,Submarine History & Tech,Hollywood Deep Cuts,Gaming Lore & Mechanics,Advanced Rocketry,Frontier Survival Skills
+200,"This lightweight, corrosion-resistant alloy is commonly used in AR-15 receivers to balance strength and weight;What is 7075-T6 aluminum?","This WWII U.S. submarine was the first to sink an enemy ship;What is USS Gudgeon?","This Hollywood camera rig allows stabilized handheld shots while the operator walks or runs;What is a Steadicam?","In 'Legend of Zelda: Majora’s Mask', this in-game cycle lasts exactly this many real-time hours before repeating;What is 54 minutes?","The nozzle expansion ratio in rocket engines affects this key performance metric;What is specific impulse?","This type of shelter, made from evergreen branches piled over a frame, is used to insulate against wind in winter;What is a lean-to?"`;
 
         const completion = await openaiClient.chat.completions.create({
             model: "gpt-4o",
