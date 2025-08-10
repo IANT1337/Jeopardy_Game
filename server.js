@@ -4,6 +4,19 @@ const socketIo = require('socket.io');
 const fs = require('fs');
 const path = require('path');
 const csv = require('csv-parser');
+const OpenAI = require('openai');
+
+// OpenAI client will be initialized only when needed
+let openai = null;
+
+function getOpenAIClient() {
+    if (!openai && process.env.OPENAI_API_KEY) {
+        openai = new OpenAI({
+            apiKey: process.env.OPENAI_API_KEY
+        });
+    }
+    return openai;
+}
 
 const app = express();
 const server = http.createServer(app);
@@ -163,6 +176,69 @@ function loadQuestionsFromCSV() {
 
 // Initialize questions
 loadQuestions();
+
+// Function to generate new questions using OpenAI
+async function generateNewQuestions() {
+    try {
+        if (!process.env.OPENAI_API_KEY) {
+            throw new Error('OpenAI API key not configured in environment variables');
+        }
+
+        const openaiClient = getOpenAIClient();
+        if (!openaiClient) {
+            throw new Error('Failed to initialize OpenAI client');
+        }
+
+        const prompt = `Generate a complete set of Jeopardy questions in CSV format. Create exactly 5 price levels ($200, $400, $600, $800, $1000) and 6 categories. Each question should be in the format "question text;What is answer?" or "question text;Who is answer?" etc.
+
+Format the output as CSV with the following structure:
+- First column: "price" (contains the dollar values: 200, 400, 600, 800, 1000)
+- Next 6 columns: Category names (e.g., GEOGRAPHY, SCIENCE, HISTORY, SPORTS, ENTERTAINMENT, FOOD)
+- Each data row should have the price in the first column, then 6 questions for that price level
+- Each question should be formatted as: "question text;correct answer"
+- Make sure answers are in proper Jeopardy format (What is...?, Who is...?, etc.)
+- Categories should be varied and interesting
+- Questions should increase in difficulty with higher dollar values
+- Do not include any markdown formatting or code blocks in the response
+- Start directly with the CSV header row
+
+Example format:
+price,GEOGRAPHY,SCIENCE,HISTORY,SPORTS,ENTERTAINMENT,FOOD
+200,This continent contains the Amazon rainforest;What is South America?,This gas makes up about 78% of Earth's atmosphere;What is nitrogen?,This war began in 1914;What is World War I?,This sport is played at Wimbledon;What is tennis?,This streaming service created Stranger Things;What is Netflix?,This Italian dish means "little strings";What is spaghetti?`;
+
+        const completion = await openaiClient.chat.completions.create({
+            model: "gpt-3.5-turbo",
+            messages: [
+                {
+                    role: "system",
+                    content: "You are a Jeopardy question writer. Generate only valid CSV content without any additional text, markdown, or explanations. The output should be ready to save directly as a CSV file."
+                },
+                {
+                    role: "user",
+                    content: prompt
+                }
+            ],
+            max_tokens: 2000,
+            temperature: 0.8
+        });
+
+        const csvContent = completion.choices[0].message.content.trim();
+        
+        // Validate that the response looks like CSV
+        if (!csvContent.includes('price,') || !csvContent.includes(';')) {
+            throw new Error('Generated content does not appear to be valid CSV format');
+        }
+
+        // Save the new questions to the CSV file
+        fs.writeFileSync('jeopardy_questions.csv', csvContent);
+        console.log('New questions generated and saved successfully');
+        
+        return csvContent;
+    } catch (error) {
+        console.error('Error generating new questions:', error);
+        throw error;
+    }
+}
 
 // Function to assign exactly one daily double randomly
 function assignDailyDouble() {
@@ -573,6 +649,52 @@ io.on('connection', (socket) => {
         gameState.finalJeopardyWagers = {};
         
         io.emit('game-reset', gameState);
+    });
+    
+    socket.on('generate-new-questions', async () => {
+        if (socket.id !== gameState.hostId) return;
+        
+        try {
+            socket.emit('questions-generating', { status: 'Generating new questions with AI...' });
+            
+            await generateNewQuestions();
+            await loadQuestions();
+            
+            // Reset the game with new questions
+            // Reset scores but keep contestants
+            Object.keys(gameState.contestants).forEach(id => {
+                gameState.contestants[id].score = 0;
+                gameState.contestants[id].canBuzz = true;
+            });
+            
+            // Also reset scores in persistent storage
+            Object.keys(gameState.contestantsByName).forEach(name => {
+                gameState.contestantsByName[name].score = 0;
+                gameState.contestantsByName[name].canBuzz = true;
+            });
+            
+            // Assign a new daily double for the new questions
+            assignDailyDouble();
+            
+            gameState.currentQuestion = null;
+            gameState.answering = false;
+            gameState.answeringContestant = null;
+            gameState.gamePhase = 'playing';
+            gameState.finalJeopardyWagers = {};
+            
+            socket.emit('questions-generated', { 
+                status: 'New questions generated successfully!',
+                gameState: gameState 
+            });
+            
+            io.emit('game-reset', gameState);
+            
+        } catch (error) {
+            console.error('Error generating new questions:', error);
+            socket.emit('questions-generation-error', { 
+                error: error.message || 'Failed to generate new questions' 
+            });
+        }
     });
     
     socket.on('disconnect', () => {

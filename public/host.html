@@ -40,9 +40,13 @@
                 
                 <div class="game-controls">
                     <h3>Game Controls</h3>
+                    <button class="btn btn-primary" onclick="generateNewQuestions()">🤖 Generate New Questions</button>
                     <button class="btn btn-primary" onclick="startFinalJeopardy()">Start Final Jeopardy</button>
                     <button class="btn btn-primary" onclick="resetGame()">Reset Game</button>
                     <p><strong>Game Phase:</strong> <span id="game-phase">Waiting for contestants</span></p>
+                    <div id="generation-status" class="generation-status hidden">
+                        <span id="generation-message"></span>
+                    </div>
                 </div>
             </div>
             

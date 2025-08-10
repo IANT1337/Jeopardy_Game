@@ -233,3 +233,30 @@
     text-align: center;
     color: #fff;
 }
+
+.generation-status {
+    margin-top: 15px;
+    padding: 10px 15px;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.generation-status.generating {
+    background: rgba(255, 193, 7, 0.3);
+    border: 2px solid #ffc107;
+    color: #ffc107;
+}
+
+.generation-status.success {
+    background: rgba(76, 175, 80, 0.3);
+    border: 2px solid #4CAF50;
+    color: #4CAF50;
+}
+
+.generation-status.error {
+    background: rgba(244, 67, 54, 0.3);
+    border: 2px solid #f44336;
+    color: #f44336;
+}

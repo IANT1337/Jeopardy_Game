@@ -1,6 +1,11 @@
 # Jeopardy Game
 
-A multiplayer Jeopardy web application that allows you to host games on your local machine with remote contestants.
+A multiplayer Jeopardy web application that a6. Wait for contestants to join using the Session ID
+7. Assign names to contestants as they connect
+8. (Optional) Click "🤖 Generate New Questions" to create fresh questions using AI
+9. Click on dollar amounts to select questions
+10. Judge answers as correct or incorrect
+11. Manage Daily Doubles and Final Jeopardy you to host games on your local machine with remote contestants.
 
 ## Features
 
@@ -16,6 +21,7 @@ A multiplayer Jeopardy web application that allows you to host games on your loc
   - Final Jeopardy round
 - **Host Controls**: 
   - Create and manage game sessions
+  - Generate new questions using AI (OpenAI ChatGPT)
   - Assign names to contestants
   - View contestant IP addresses
   - Judge answers as correct/incorrect
@@ -35,17 +41,22 @@ A multiplayer Jeopardy web application that allows you to host games on your loc
    npm install
    ```
 
-2. **Prepare Questions**:
+2. **Environment Variables** (optional):
+   - Copy `.env.example` to `.env` and configure if needed
+   - Set `OPENAI_API_KEY` to enable AI question generation
+   - Set `HOST_PASSWORD` to change from default password
+
+3. **Prepare Questions**:
    - Edit `questions.txt` with your categories and questions
    - Format: Tab-separated values with categories in first row, prices in first column
    - Questions should be phrased as statements (contestants respond with questions)
 
-3. **Start the Server**:
+4. **Start the Server**:
    ```bash
    npm start
    ```
 
-4. **Access the Game**:
+5. **Access the Game**:
    - Open your browser and go to `http://localhost:3000`
    - **Default Host Password**: `jeopardy2025` (can be changed with environment variable `HOST_PASSWORD`)
 
@@ -81,6 +92,34 @@ A multiplayer Jeopardy web application that allows you to host games on your loc
 - **Final Jeopardy**:
   - All contestants must wager before seeing answers
   - Maximum wager is your current score (minimum $1000 if score is negative)
+
+## AI Question Generation
+
+The game includes an AI-powered question generation feature using OpenAI's ChatGPT. This allows hosts to generate fresh, unique Jeopardy questions instantly.
+
+### Setting Up AI Question Generation
+
+1. **Get an OpenAI API Key**:
+   - Sign up at https://platform.openai.com/
+   - Navigate to API Keys section
+   - Create a new API key
+
+2. **Configure the Environment Variable**:
+   - Set the environment variable `OPENAI_API_KEY` to your API key
+   - For Railway deployment: Set `OPENAI_API_KEY` in the environment variables
+   - For local development: Add to your `.env` file
+
+3. **Using the Feature**:
+   - In the Host interface, click "🤖 Generate New Questions"
+   - The AI will create 30 new questions (5 price levels × 6 categories)
+   - Questions are automatically saved and the game board is refreshed
+   - All scores are reset when new questions are generated
+
+### Features:
+- Generates diverse, engaging questions across multiple categories
+- Questions follow proper Jeopardy format (statements requiring question responses)
+- Difficulty scales appropriately with dollar values
+- Questions are saved to the CSV file for future use
 
 ## Question File Format
 

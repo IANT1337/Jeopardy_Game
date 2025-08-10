@@ -129,6 +129,35 @@ socket.on('game-reset', (newGameState) => {
     updateGamePhase();
 });
 
+// New question generation handlers
+socket.on('questions-generating', (data) => {
+    showGenerationStatus(data.status, 'generating');
+});
+
+socket.on('questions-generated', (data) => {
+    showGenerationStatus(data.status, 'success');
+    gameState = data.gameState;
+    updateContestantsList(gameState.contestants);
+    updateBoard();
+    hideCurrentQuestion();
+    hideFinalJeopardy();
+    updateGamePhase();
+    
+    // Hide status after 3 seconds
+    setTimeout(() => {
+        hideGenerationStatus();
+    }, 3000);
+});
+
+socket.on('questions-generation-error', (data) => {
+    showGenerationStatus(`Error: ${data.error}`, 'error');
+    
+    // Hide status after 5 seconds
+    setTimeout(() => {
+        hideGenerationStatus();
+    }, 5000);
+});
+
 // UI update functions
 function updateContestantsList(contestants) {
     const list = document.getElementById('contestants-list');
@@ -377,4 +406,25 @@ function resetGame() {
     if (confirm('Are you sure you want to reset the game? This will clear all scores and reset the board.')) {
         socket.emit('reset-game');
     }
+}
+
+// New question generation
+function generateNewQuestions() {
+    if (confirm('Are you sure you want to generate new questions? This will replace all current questions and reset the game.')) {
+        socket.emit('generate-new-questions');
+    }
+}
+
+function showGenerationStatus(message, type) {
+    const statusDiv = document.getElementById('generation-status');
+    const messageSpan = document.getElementById('generation-message');
+    
+    messageSpan.textContent = message;
+    statusDiv.classList.remove('hidden', 'success', 'error', 'generating');
+    statusDiv.classList.add(type);
+}
+
+function hideGenerationStatus() {
+    const statusDiv = document.getElementById('generation-status');
+    statusDiv.classList.add('hidden');
 }
